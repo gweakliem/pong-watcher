@@ -1,0 +1,7 @@
+pong:
+  mqtt:
+    topic: motion_sensor/events
+    #broker: tcp://172.24.160.21:1883
+    broker: tcp://localhost:1883
+    qos: 1
+    clientName: PongWatcher

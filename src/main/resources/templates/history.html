@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>History</title>
+</head>
+
+<body>
+
+<h1>Sensor History</h1>
+<ul>
+    <ul th:each="event : ${eventHistory}">
+        <span th:text="${event.getTimestampAsLocal() }"></span>
+        <span th:text="${event.motionDetected}"/>
+    </ul>
+</ul>
+</body>
+</html>
