@@ -38,4 +38,10 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-defaultTasks 'clean', 'build'
+task acceptanceTest(type: Exec) {
+    workingDir (file(project.projectDir.absolutePath + "/acceptance_pong_watcher"))
+    executable "bash"
+    args "-c", "bundle install && bundle exec rspec"
+}
+
+defaultTasks 'clean', 'build', 'acceptanceTest'

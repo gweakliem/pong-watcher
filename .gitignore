@@ -22,3 +22,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
+acceptance_pong_watcher/*.log
+Gemfile.lock    

@@ -10,15 +10,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.LongStream;
+import java.util.stream.StreamSupport;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {RepositoryConfiguration.class})
@@ -28,6 +33,17 @@ public class MotionEventRepositoryTest {
     MotionEventRepository repository;
 
     private List<MotionEvent> events;
+
+    @Before
+    public void setup() {
+        Random rand = new Random(1234);
+        repository.deleteAll();
+        events = LongStream.iterate(Instant.now().getEpochSecond(), n -> n + 29)
+                .limit(30)
+                .mapToObj(t -> new MotionEvent().setTimestamp(t).setMotionDetected(rand.nextBoolean()))
+                .collect(toList());
+        repository.save(events);
+    }
 
     @Test
     public void testSave_ExistsAfterSave() {
@@ -46,23 +62,15 @@ public class MotionEventRepositoryTest {
         assertThat(first, equalTo(events.get(events.size() - 1)));
     }
 
-    @Before
-    public void setup() {
-        Random rand = new Random(1234);
-        events = LongStream.iterate(Instant.now().getEpochSecond(), n -> n + 29)
-                .limit(30)
-                .mapToObj(t -> new MotionEvent().setTimestamp(t).setMotionDetected(rand.nextBoolean()))
-                .collect(toList());
-        repository.save(events);
-    }
-
     @Test
     public void findMostRecentActivity() throws Exception {
-        MotionEvent first = repository.findFirstByMotionDetected(true);
+        MotionEvent first = repository.findFirstByMotionDetectedOrderByTimestampDesc(true);
+
         assertTrue(first.isMotionDetected());
         MotionEvent last = events.stream()
                 .filter(MotionEvent::isMotionDetected)
-                .reduce(new MotionEvent(), (m1, m2) -> m2);
+                .max((m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()))
+                .orElse(null);
         assertThat(first, equalTo(last));
     }
 
@@ -70,6 +78,8 @@ public class MotionEventRepositoryTest {
     public void findEvents_ReturnsAllSavedEvents() throws Exception {
         Iterable<MotionEvent> dbEvents = repository.findAll();
 
-        assertEquals(events, dbEvents);
+        int size = events.size();
+        assertThat(StreamSupport.stream(dbEvents.spliterator(), false).count(),equalTo((long)size));
+        assertThat(dbEvents, containsInAnyOrder(events.toArray()));
     }
 }

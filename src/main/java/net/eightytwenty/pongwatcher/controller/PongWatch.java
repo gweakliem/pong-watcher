@@ -19,12 +19,19 @@ public class PongWatch {
         this.motionEventRepository = motionEventRepository;
     }
 
-    @RequestMapping(value = "/history", method = RequestMethod.GET)
+    @RequestMapping(value = "/events", method = RequestMethod.GET)
     public String history(Model historyModel) {
 
         List<MotionEvent> eventHistory = motionEventRepository.findAllByOrderByTimestampDesc();
 
         historyModel.addAttribute("eventHistory", eventHistory);
         return "history";
+    }
+
+    @RequestMapping(value = "current", method = RequestMethod.GET)
+    public String current(Model statusModel) {
+
+        MotionEvent event = motionEventRepository.findFirstByOrderByTimestampDesc();
+        return "current";
     }
 }
