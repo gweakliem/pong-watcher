@@ -5,3 +5,8 @@ pong:
     broker: tcp://localhost:1883
     qos: 1
     clientName: PongWatcher
+
+spring:
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false

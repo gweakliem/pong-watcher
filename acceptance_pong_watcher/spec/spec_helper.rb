@@ -14,15 +14,18 @@ require 'time'
 #DatabaseCleaner.strategy = :truncation
 
 class EventSimulator
+    attr_reader :events
     def run
-        rng = Random.new
+        @events = []
+        10.times { |i|
+            t = Time.now - (10 * i)
+            @events.push({ts: t.strftime("%FT%T"),
+                             m: [true, false].sample})
+        }
 
         MQTT::Client.connect('mqtt://localhost:1883') do |c|
-        10.times {
-        puts 'publishing'
-          c.publish('motion_sensor/events',
-                {ts: Time.new.strftime("%FT%T%:z"),
-                    m: rng.rand(0..1) ? true:false}.to_json)
+            @events.each { |e|
+              c.publish('motion_sensor/events', e.to_json)
             }
         end
     end
@@ -56,8 +59,6 @@ class PongWatcher
         else
             puts "Starting app"
 
-            puts File.expand_path('../../../',__FILE__)
-
             @pid = Process.spawn("SERVER_PORT=#{@port} ./gradlew bootRun",
                 chdir: File.expand_path('../../../',__FILE__),
                 pgroup: true,
@@ -79,7 +80,7 @@ class PongWatcher
 
     def wait_for_app_to_start
         attempts = 0
-        until health_is_ok? "http://localhost:#{port}/health"
+        until health_is_ok? "http://localhost:#{@port}/health"
             attempts = attempts + 1
             if attempts >= 60
                 raise "app never came up after #{attempts} seconds"
@@ -92,7 +93,6 @@ class PongWatcher
 
     def health_is_ok?(url)
         begin
-            puts "Checking #{url}"
             HTTParty.get(url).code == 200
         rescue Errno::ECONNREFUSED
             false
@@ -101,7 +101,8 @@ class PongWatcher
 end
 
 RSpec.configure do |config|
-    #config.filter_run :focus
+    config.filter_run :focus
+    config.run_all_when_everything_filtered = true
 
     config.default_formatter = 'doc'
     config.order = :random
@@ -117,8 +118,5 @@ RSpec.configure do |config|
     app = PongWatcher.new
     app.port = 9000
     app.run
-
-    es = EventSimulator.new
-    es.run
 
 end
