@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Ping Pong Table Status</title>
+</head>
+<body>
+
+<style>
+    .container {
+        color: #ffffff;
+    }
+    .available {
+        background-color: #59c605;
+    }
+    .in-use {
+        background-color: #f70000;
+    }
+</style>
+<div class="container" th:class="${inUse}? 'in-use' : 'available'">
+    <h1>Ping Pong Table Status</h1>
+    <div th:text="*{inUse}? 'In Use' : 'Available'"></div>
+    </div>
+</body>
+</html>
