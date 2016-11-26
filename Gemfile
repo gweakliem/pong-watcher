@@ -11,4 +11,6 @@ group :test do
     gem 'rspec'
     gem 'httparty'
     gem 'mqtt'
+    gem 'pg'
+    gem 'activerecord'
 end

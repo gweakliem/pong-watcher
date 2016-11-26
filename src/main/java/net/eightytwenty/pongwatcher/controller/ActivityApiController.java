@@ -13,12 +13,12 @@ import java.time.ZoneOffset;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("/api")
-public class ApiController {
+@RequestMapping("/api/activity")
+public class ActivityApiController {
     MotionEventRepository motionEventRepository;
 
     @Autowired
-    public ApiController(MotionEventRepository repository) {
+    public ActivityApiController(MotionEventRepository repository) {
         this.motionEventRepository = repository;
     }
 
@@ -36,6 +36,10 @@ public class ApiController {
     public MotionEvent lastEvent() {
         net.eightytwenty.pongwatcher.data.model.MotionEvent event =
                 motionEventRepository.findFirstByMotionDetectedOrderByTimestampDesc(true);
+        if (event == null) {
+            return null;
+        }
         return new MotionEvent(event.getTimestampAsLocal(), event.isMotionDetected());
     }
+
 }

@@ -24,4 +24,5 @@ nbdist/
 .nb-gradle/
 
 acceptance_pong_watcher/*.log
+acceptance_pong_watcher/*.db
 Gemfile.lock

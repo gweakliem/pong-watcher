@@ -1,7 +1,6 @@
 package net.eightytwenty.pongwatcher.data.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -10,10 +9,17 @@ import java.util.Objects;
  * Using design suggested in http://stackoverflow.com/questions/3312857/h2-database-clustered-indexes-support
  */
 @Entity
+@Table(name = "motion_events")
 public class MotionEvent {
     @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
     private Long timestamp;
     private boolean motionDetected;
+
+    public Long getId() {
+        return id;
+    }
 
     public MotionEvent setTimestamp(Long timestamp) {
         this.timestamp = timestamp;

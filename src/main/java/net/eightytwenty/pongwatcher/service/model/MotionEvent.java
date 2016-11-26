@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import net.eightytwenty.pongwatcher.data.LocalDateTimeAttributeConverter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Convert;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

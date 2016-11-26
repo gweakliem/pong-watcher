@@ -1,7 +1,6 @@
 pong:
   mqtt:
     topic: motion_sensor/events
-    #broker: tcp://172.24.160.21:1883
     broker: tcp://localhost:1883
     qos: 1
     clientName: PongWatcher
@@ -10,3 +9,18 @@ spring:
   jackson:
     serialization:
       write_dates_as_timestamps: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      default_schema: pong_watch
+    database: POSTGRESQL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pong_watch
+    username: ping
+    password: pong
+    driverClassName: org.postgresql.Driver
+
+flyway:
+  url: jdbc:postgresql://localhost:5432/pong_watch
+  user: ping
+  password: pong

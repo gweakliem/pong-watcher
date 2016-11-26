@@ -51,9 +51,9 @@ public class MotionEventRepositoryTest {
         event.setTimestamp(12345L);
         event.setMotionDetected(true);
 
-        repository.save(event);
+        MotionEvent saved = repository.save(event);
 
-        assertTrue(repository.exists(12345L));
+        assertTrue(repository.exists(saved.getId()));
     }
 
     @Test

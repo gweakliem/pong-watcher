@@ -1,17 +1,18 @@
+db_dir = File.expand_path('../..', __FILE__)
 support = File.expand_path('../support', __FILE__)
 $LOAD_PATH.unshift(support) unless $LOAD_PATH.include?(support)
 
 require 'colorize'
 require 'httparty'
+require 'active_record'
 
 #require 'rspec'
 require 'json_matchers/rspec'
 require 'mqtt'
 require 'time'
 
-#require 'database_cleaner'
-
-#DatabaseCleaner.strategy = :truncation
+require 'database_cleaner'
+DatabaseCleaner.strategy = :truncation
 
 class EventSimulator
     attr_reader :events
@@ -45,6 +46,25 @@ class Mosquitto
 
         at_exit {
                     puts "Stopping processs #{@pid}"
+                    Process.kill('TERM',@pid)
+                }
+    end
+end
+
+class H2
+    def run
+        puts "Starting h2"
+
+        @pid = Process.spawn("h2 -pg -pgPort 5432",
+            chdir: File.expand_path('../../../',__FILE__),
+            pgroup: true,
+            out: 'h2.std.log',
+            err: 'h2.err.log')
+
+        puts "Started h2 at pid #{@pid}"
+
+        at_exit {
+                    puts "Stopping h2 processs #{@pid}"
                     Process.kill('TERM',@pid)
                 }
     end
@@ -109,8 +129,25 @@ RSpec.configure do |config|
     Kernel.srand config.seed
 
     config.before :suite do
-        #DatabaseCleaner.clean
+        DatabaseCleaner.clean
+        puts 'seeding event publisher'
     end
+
+    config.before :each do
+        DatabaseCleaner.clean
+    end
+
+    ActiveRecord::Base.establish_connection(
+        adapter: 'postgresql',
+        database: 'pong_watch',
+        host: 'localhost',
+        username: 'ping',
+        password: 'pong',
+        schema_search_path: 'pong_watch'
+    )
+
+    #h2 = H2.new
+    #h2.run
 
     mq = Mosquitto.new
     mq.run
