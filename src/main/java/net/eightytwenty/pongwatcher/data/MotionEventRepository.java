@@ -8,7 +8,7 @@ import java.util.List;
 public interface MotionEventRepository extends CrudRepository<MotionEvent, Long> {
     MotionEvent findFirstByOrderByTimestampDesc();
 
-    MotionEvent findFirstByMotionDetectedOrderByTimestampDesc(boolean b);
+    MotionEvent findFirstByMotionDetectedOrderByTimestampDesc(boolean motionDetected);
 
     List<MotionEvent> findAllByOrderByTimestampDesc();
 }
