@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 @Service
 public class MotionService {
@@ -29,5 +30,9 @@ public class MotionService {
                 .toLocalDateTime();
         boolean inUse = lastActivity.isMotionDetected();
         return new Usage(inUse, lastTime);
+    }
+
+    public List<MotionEvent> getHistory() {
+        return motionEventRepository.findAllByOrderByTimestampDesc();
     }
 }

@@ -1,6 +1,5 @@
 package net.eightytwenty.pongwatcher.controller;
 
-import net.eightytwenty.pongwatcher.data.MotionEventRepository;
 import net.eightytwenty.pongwatcher.data.model.MotionEvent;
 import net.eightytwenty.pongwatcher.service.MotionService;
 import net.eightytwenty.pongwatcher.service.model.Usage;
@@ -14,12 +13,10 @@ import java.util.List;
 
 @Controller
 public class PongWatch {
-    private MotionEventRepository motionEventRepository;
     private MotionService motionService;
 
     @Autowired
-    public PongWatch(MotionEventRepository motionEventRepository, MotionService motionService) {
-        this.motionEventRepository = motionEventRepository;
+    public PongWatch(MotionService motionService) {
         this.motionService = motionService;
     }
 
@@ -33,17 +30,8 @@ public class PongWatch {
 
     @RequestMapping(value = "/events", method = RequestMethod.GET)
     public String history(Model historyModel) {
-
-        List<MotionEvent> eventHistory = motionEventRepository.findAllByOrderByTimestampDesc();
-
+        List<MotionEvent> eventHistory = motionService.getHistory();
         historyModel.addAttribute("eventHistory", eventHistory);
         return "history";
-    }
-
-    @RequestMapping(value = "current", method = RequestMethod.GET)
-    public String current(Model statusModel) {
-
-        MotionEvent event = motionEventRepository.findFirstByOrderByTimestampDesc();
-        return "current";
     }
 }
