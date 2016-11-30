@@ -6,7 +6,7 @@ import json
 from gpiozero import MotionSensor
 
 def read_from_sensor():
-	pir.wait_for_motion()
+    pir.wait_for_motion()
 
 def on_publish(client, userdata, mid):
     print("mid: " + userdata)
@@ -20,11 +20,9 @@ client.loop_start()
 while True:
     motion_detected = read_from_sensor()
     (rc, mid) = client.publish("motion_sensor/events", json.dumps({'ts': datetime.datetime.utcnow().isoformat(), 'm': motion_detected}), qos=1)
-	while pir.motion_detected:
-		time.sleep(10)
-        (rc, mid) = client.publish("motion_sensor/events", json.dumps({'ts': datetime.datetime.utcnow().isoformat(), 'm': motion_detected}), qos=1)
-    (rc, mid) = client.publish("motion_sensor/events", json.dumps({'ts': datetime.datetime.utcnow().isoformat(), 'm': motion_detected}), qos=1)
+    time.sleep(10)
 
+#leaving this around in case I want to do file logging later
 #logfile = '/home/pi/nb-' + str(datetime.now().strftime("%Y%m%d-%H%M")) +".csv"
 #logging.basicConfig(filename=logfile, level=logging.DEBUG,
 #	format='%(asctime)s %(message)s',
