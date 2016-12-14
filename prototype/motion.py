@@ -9,7 +9,7 @@ def read_from_sensor():
     pir.wait_for_motion()
 
 def on_publish(client, userdata, mid):
-    print("mid: " + userdata)
+    print("mid: %s %s" %(mid, userdata))
 
 pir = MotionSensor(4)
 client = paho.Client()

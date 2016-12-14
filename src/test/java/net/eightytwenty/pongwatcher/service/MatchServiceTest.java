@@ -9,6 +9,12 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.codehaus.groovy.runtime.InvokerHelper.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -39,4 +45,24 @@ public class MatchServiceTest {
         assertNull(match.getCompleted());
     }
 
+    @Test
+    public void getMatchesNotCompleted() {
+        when(matchRepository.findByCompleted(null))
+                .thenReturn(asList(new MatchEntity(1L,"foo","3035551212","Polaris",null, null,null)));
+        List<Match> matches = service.getMatches(true);
+
+        verify(matchRepository).findByCompleted(null);
+        assertThat(matches.size(), equalTo(1));
+    }
+
+    @Test
+    public void getMatchesCompleted() {
+        when(matchRepository.findByCompletedLessThan(any(LocalDateTime.class)))
+                .thenReturn(asList(new MatchEntity(1L,"foo","3035551212","Polaris",LocalDateTime.now().minusHours(1), null,null)));
+        List<Match> matches = service.getMatches(false);
+
+        verify(matchRepository).findByCompletedLessThan(any(LocalDateTime.class));
+        assertThat(matches.size(), equalTo(1));
+
+    }
 }

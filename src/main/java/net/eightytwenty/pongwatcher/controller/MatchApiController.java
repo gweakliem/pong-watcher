@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -25,8 +26,11 @@ public class MatchApiController {
     private MatchService matchService;
 
     @RequestMapping(path = "/matches", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Match> getMatches() {
-        return matchService.getMatches();
+    public List<Match> getMatches(@RequestParam(name="unplayed", required=false) Optional<Boolean> unplayed) {
+        if (!unplayed.isPresent()) {
+            return matchService.getAllMatches();
+        }
+        return matchService.getMatches(unplayed.get());
     }
 
     @RequestMapping(path = "/matches", method = RequestMethod.POST,

@@ -35,8 +35,21 @@ public class MatchService {
                 result.getUpdated());
     }
 
-    public List<Match> getMatches() {
-        Iterable<MatchEntity> matchEntities = repository.findAll();
+    public List<Match> getAllMatches() {
+        return convertEntityToModel(repository.findAll());
+    }
+
+    public List<Match> getMatches(boolean unplayed) {
+        Iterable<MatchEntity> matchEntities;
+        if (unplayed) {
+            matchEntities = repository.findByCompleted(null);
+        } else {
+            matchEntities = repository.findByCompletedLessThan(LocalDateTime.now());
+        }
+        return convertEntityToModel(matchEntities);
+    }
+
+    private List<Match> convertEntityToModel(Iterable<MatchEntity> matchEntities) {
         return StreamSupport.stream(matchEntities.spliterator(), false)
                 .map(entity -> new Match(String.valueOf(entity.getId()),
                         entity.getName(),
@@ -96,4 +109,5 @@ public class MatchService {
 //        return String.valueOf(repository.findOne(Long.parseLong(id)).hashCode()).equals(eTag);
         return false;
     }
+
 }
