@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Matches</title>
+</head>
+<body>
+
+<table id="match-table">
+    <a href="/matches/edit">New Match</a>
+    <thead><tr><th>Name</th><th>Phone</th><th>Location</th></tr></thead>
+    <tbody>
+    <tr th:each="match,itrStat : ${matches}"  th:classappend="${itrStat.even}? 'even-row':'odd-row'" class="match-row">
+        <td th:text="${match.name}"></td><td th:text="${match.location}"></td>
+        <td th:text="${match.phone}"></td>
+        <td><th:button>Complete</th:button></td>
+        <td><th:button>Cancel</th:button></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

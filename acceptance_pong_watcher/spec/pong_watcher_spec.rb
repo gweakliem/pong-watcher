@@ -2,14 +2,14 @@ require 'spec_helper'
 require 'ap'
 require 'db_models'
 
-describe 'pong watcher' do
+describe 'pong watcher API' do
     before do
         @es = EventSimulator.new
         @es.run
         sleep 1
     end
 
-    context 'activity monitor API' do
+    context 'activity monitor' do
         it 'supplies a history of motion events' do
             history_resp = HTTParty.get("http://localhost:9000/api/activity/history")
             expect(history_resp.code).to eq 200
@@ -37,7 +37,7 @@ describe 'pong watcher' do
         end
     end
 
-    context 'match schedule API' do
+    context 'match schedule' do
         before do
             match1 = Match.new(
                 id: 1,

@@ -11,7 +11,13 @@ require 'json_matchers/rspec'
 require 'mqtt'
 require 'time'
 
+require 'selenium-webdriver'
+require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
+
 require 'database_cleaner'
+
+require 'urls'
 DatabaseCleaner.strategy = :truncation
 
 class EventSimulator
@@ -120,6 +126,21 @@ class PongWatcher
     end
 end
 
+Capybara::Screenshot.prune_strategy = :keep_last_run
+
+Capybara.configure do |config|
+    config.run_server = false
+    config.default_driver = :selenium
+    config.app_host = pong_watcher_url('')
+    config.default_max_wait_time = 1
+end
+
+Capybara.register_driver :selenium do |app|
+    Capybara::Selenium::Driver.new(app, :browser => :chrome)
+end
+
+Capybara.javascript_driver = :chrome
+
 RSpec.configure do |config|
     config.filter_run :focus
     config.run_all_when_everything_filtered = true
@@ -127,6 +148,8 @@ RSpec.configure do |config|
     config.default_formatter = 'doc'
     config.order = :random
     Kernel.srand config.seed
+
+    config.include Capybara::DSL
 
     config.before :suite do
         DatabaseCleaner.clean

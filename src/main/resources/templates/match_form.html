@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Matches</title>
+</head>
+<body>
+
+<div class="container">
+    <form action="#" th:action="@{/matches/edit}"
+          th:object="${match}" method="post">
+        <ul th:if="${#fields.hasErrors('*')}">
+            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+        </ul>
+        <input type="hidden" th:field="*{id}"/>
+        <fieldset>
+        <div><label>Name: <input type="text" th:field="*{name}"  th:errorclass="fieldError"/></label></div>
+        <div><label>Phone: <input type="text" th:field="*{phone}"/></label></div>
+        <div><label>Location: <input type="text" th:field="*{location}"/></label></div>
+        <div><label>Completed: <span th:text="*{completed}"></span></label></div>
+        <div><button type="submit" name="save" value="Save">Save</button></div>
+        </fieldset>
+    </form>
+
+</div>
+</body>
+</html>

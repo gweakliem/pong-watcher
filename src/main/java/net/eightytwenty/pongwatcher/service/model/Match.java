@@ -68,6 +68,41 @@ public class Match {
         return location;
     }
 
+    public Match setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public Match setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Match setPhone(String phone) {
+        this.phone = phone;
+        return this;
+    }
+
+    public Match setLocation(String location) {
+        this.location = location;
+        return this;
+    }
+
+    public Match setCreated(LocalDateTime created) {
+        this.created = created;
+        return this;
+    }
+
+    public Match setUpdated(LocalDateTime updated) {
+        this.updated = updated;
+        return this;
+    }
+
+    public Match setCompleted(LocalDateTime completed) {
+        this.completed = completed;
+        return this;
+    }
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "GMT")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -87,5 +122,18 @@ public class Match {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     public LocalDateTime getUpdated() {
         return updated;
+    }
+
+    @Override
+    public String toString() {
+        return "Match{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", location='" + location + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", completed=" + completed +
+                '}';
     }
 }

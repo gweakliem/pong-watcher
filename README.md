@@ -14,6 +14,9 @@ name on the whiteboard? Can I self-service this process?
     `pip install gpizero`
 * On the host (the one running the spring boot app)
 * Install h2 - I used `brew install h2`
+* Install postgres
+    * start postgres
+      `pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start`
 
 ## Running the server
 
