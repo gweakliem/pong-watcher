@@ -30,6 +30,21 @@ public class MatchRequestEntity {
         return location;
     }
 
+    public MatchRequestEntity setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public MatchRequestEntity setPhone(String phone) {
+        this.phone = phone;
+        return this;
+    }
+
+    public MatchRequestEntity setLocation(String location) {
+        this.location = location;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -6,14 +6,17 @@
 <body>
 
 <table id="match-table">
-    <a href="/matches/edit">New Match</a>
+    <a href="/matches/creator">New Match</a>
     <thead><tr><th>Name</th><th>Phone</th><th>Location</th></tr></thead>
     <tbody>
     <tr th:each="match,itrStat : ${matches}"  th:classappend="${itrStat.even}? 'even-row':'odd-row'" class="match-row">
         <td th:text="${match.name}"></td><td th:text="${match.location}"></td>
         <td th:text="${match.phone}"></td>
-        <td><th:button>Complete</th:button></td>
-        <td><th:button>Cancel</th:button></td>
+        <td><a th:href="@{/matches/editor/__${match.id}__}">Edit</a></td>
+        <td><form action="#" th:action="@{/matches/canceller/__${match.id}__}" method="post">
+            <input type="hidden" name="cancelled" value="true" />
+            <button type="submit">Cancel</button>
+        </form></td>
     </tr>
     </tbody>
 </table>

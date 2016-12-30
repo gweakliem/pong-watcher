@@ -6,7 +6,7 @@
 <body>
 
 <div class="container">
-    <form action="#" th:action="@{/matches/edit}"
+    <form action="#" th:action="@{/matches/__${action}__}"
           th:object="${match}" method="post">
         <ul th:if="${#fields.hasErrors('*')}">
             <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
