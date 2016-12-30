@@ -8,7 +8,8 @@
 
 <style>
     .container {
-        color: #ffffff;
+        background-color: #ffffff;
+        color: #000000;
     }
     .available {
         background-color: #59c605;
@@ -16,10 +17,30 @@
     .in-use {
         background-color: #f70000;
     }
+    .status-div {
+        height: 400px;
+        font-size: 200px;
+        color: #ffffff;
+        text-align: center;
+    }
+    .menubar {
+        align: right;
+    }
 </style>
-<div class="container" th:class="${inUse}? 'in-use' : 'available'">
-    <h1>Ping Pong Table Status</h1>
-    <div th:text="*{inUse}? 'In Use' : 'Available'"></div>
+<div class="container">
+    <div class="header">
+        <div class="menubar">
+            <span><a href="/matches">Match Schedule</a></span>
+            <span><a href="/matches/creator">New Match</a></span>
+        </div>
     </div>
+    <h1>Ping Pong Table Status</h1>
+    <div class="status-div" th:classappend="${inUse}? 'in-use' : 'available'" th:text="*{inUse}? 'In Use' : 'Available'"></div>
+
+<div class="footer">
+
+</div>
+
+</div>
 </body>
 </html>

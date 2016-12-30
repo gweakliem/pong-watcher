@@ -25,4 +25,5 @@ nbdist/
 
 acceptance_pong_watcher/*.log
 acceptance_pong_watcher/*.db
+acceptance_pong_watcher/screenshot_*.*
 Gemfile.lock
